@@ -12,7 +12,7 @@
       min-height:100vh;
       display:grid;
       place-items:center;
-      overflow-y:auto;  /* diganti supaya bisa scroll */
+      overflow-y:auto;  /* supaya bisa scroll */
       overflow-x:hidden;
       background:
         radial-gradient(1000px 500px at 10% 10%, #ffd6df, transparent),
@@ -61,7 +61,7 @@
   </div>
 
   <main class="card">
-    <h1>Untuk <span class="soft">Asha</span></h1>
+    <h1>For u, <span class="soft">kakak asha</span></h1>
 
     <p>asha sayang, aku mau kita balik lagi kayak dulu</p>
     <p>aku bisa berubah, i can change my behavior</p>
@@ -86,18 +86,28 @@
     <footer>— dari aku</footer>
   </main>
 
-  <!-- background music (optional) -->
+  <!-- background music -->
   <audio id="bgm" loop>
     <source src="music.mp3" type="audio/mpeg">
   </audio>
 
+  <!-- skrip audio terbaru -->
   <script>
     const bgm = document.getElementById("bgm");
     const play = document.getElementById("play");
-    play.addEventListener("click", () => {
-      if (bgm.paused) bgm.play().catch(()=>{});
-      else bgm.pause();
-      play.textContent = bgm.paused ? "Play music ♫" : "Pause music ⏸";
+
+    play.addEventListener("click", async () => {
+      if (bgm.paused) {
+        try {
+          await bgm.play(); // paksa play, works di HP & laptop
+          play.textContent = "Pause music ⏸";
+        } catch (e) {
+          console.log("Audio gagal play:", e);
+        }
+      } else {
+        bgm.pause();
+        play.textContent = "Play music ♫";
+      }
     });
   </script>
 </body>
