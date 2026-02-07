@@ -2,23 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>i love you, sayang</title>
+  <title>i love u so much, kakak</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700&display=swap" rel="stylesheet">
   <style>
-    *{box-sizing:border-box;font-family:"Plus Jakarta Sans",sans-serif}
-    body{
-      margin:0;
-      min-height:100vh;
-      display:grid;
-      place-items:center;
-      overflow-y:auto;  /* supaya bisa scroll */
-      overflow-x:hidden;
-      background:
-        radial-gradient(1000px 500px at 10% 10%, #ffd6df, transparent),
-        linear-gradient(135deg,#ff9a9e,#fad0c4);
-      color:#2b2b2b;
+    *{box-sizing:border-box;font-family:"Plus Jakarta Sans",sans-serif;margin:0;padding:0}
+    body{overflow-y:auto;overflow-x:hidden;background:#ffccd5;color:#2b2b2b;}
+
+    /* Landing Page */
+    #landing{
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      display:flex;justify-content:center;align-items:center;
+      background:#ff9a9e;z-index:1000;
     }
+    #landing button{
+      padding:20px 40px;font-size:20px;border:none;border-radius:12px;
+      cursor:pointer;background:#fff;color:#ff4d6d;
+      box-shadow:0 5px 15px rgba(0,0,0,.2);
+      transition:transform .15s ease;
+    }
+    #landing button:active{transform:translateY(2px);}
+
     /* floating hearts */
     .bg span{
       position:absolute; font-size:18px; opacity:.25; animation: float 14s linear infinite;
@@ -26,7 +30,9 @@
     }
     @keyframes float{from{transform:translateY(110vh)}to{transform:translateY(-130vh)}}
 
+    /* Card / Konten */
     .card{
+      margin:60px auto; /* beri jarak dari top */
       background:rgba(255,255,255,.92);backdrop-filter:blur(6px);
       max-width:760px;width:92%;border-radius:24px;
       padding:26px 22px 28px;box-shadow:0 30px 60px rgba(0,0,0,.18);
@@ -39,17 +45,22 @@
     @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
     .divider{height:1px;background:linear-gradient(90deg,transparent,#ffd1da,transparent);margin:14px 0}
     .cta{margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-    button{
+    button#play{
       border:none;border-radius:999px;padding:12px 22px;font-weight:600;cursor:pointer;
       transition:transform .15s ease, box-shadow .15s ease;
-      box-shadow:0 10px 20px rgba(0,0,0,.12)
+      box-shadow:0 10px 20px rgba(0,0,0,.12);
+      background:#fff;color:#333;
     }
-    #play{background:#fff;color:#333}
-    #play:hover,#mute:hover{transform:translateY(-1px);box-shadow:0 14px 26px rgba(0,0,0,.18)}
+    button#play:hover{transform:translateY(-1px);box-shadow:0 14px 26px rgba(0,0,0,.18);}
     footer{margin-top:8px;font-size:12px;opacity:.7;text-align:center}
   </style>
 </head>
 <body>
+
+  <!-- Landing Page -->
+  <div id="landing">
+    <button id="start">Play music & Continue</button>
+  </div>
 
   <!-- floating hearts -->
   <div class="bg">
@@ -60,6 +71,7 @@
     <span style="left:85%;animation-delay:5s">💕</span>
   </div>
 
+  <!-- Main content card -->
   <main class="card">
     <h1>For u, <span class="soft">kakak asha</span></h1>
 
@@ -84,11 +96,12 @@
     <p>I'm a cowboy</p>
     <p>A cowboy in LA</p>
 
+
     <div class="cta">
       <button id="play">Play music ♫</button>
     </div>
 
-    <footer>- dari aku, athar.</footer>
+    <footer>— dari aku</footer>
   </main>
 
   <!-- background music -->
@@ -96,24 +109,37 @@
     <source src="music.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- skrip audio terbaru -->
+  <!-- Script -->
   <script>
     const bgm = document.getElementById("bgm");
+    const start = document.getElementById("start");
     const play = document.getElementById("play");
+    const landing = document.getElementById("landing");
 
+    // Tombol landing page
+    start.addEventListener("click", async () => {
+      try {
+        await bgm.play(); // play musik
+      } catch(e){
+        console.log("Audio gagal play:", e);
+      }
+      // sembunyikan landing
+      landing.style.display = "none";
+      // scroll ke card utama
+      document.querySelector(".card").scrollIntoView({behavior:"smooth"});
+    });
+
+    // Tombol play/pause tambahan di card
     play.addEventListener("click", async () => {
-      if (bgm.paused) {
-        try {
-          await bgm.play(); // paksa play, works di HP & laptop
-          play.textContent = "Pause music ⏸";
-        } catch (e) {
-          console.log("Audio gagal play:", e);
-        }
+      if(bgm.paused){
+        try{await bgm.play();}catch(e){console.log("Audio gagal play:", e);}
+        play.textContent = "Pause music ⏸";
       } else {
         bgm.pause();
         play.textContent = "Play music ♫";
       }
     });
   </script>
+
 </body>
 </html>
